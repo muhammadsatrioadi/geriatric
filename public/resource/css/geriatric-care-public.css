@@ -1,0 +1,588 @@
+/* Geriatric Care Public Pages - Custom CSS */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for Brand Colors */
+:root {
+    --gc-primary: #20B2AA; /* Turquoise/Teal */
+    --gc-primary-dark: #008B8B; /* Darker turquoise */
+    --gc-secondary: #1E3A8A; /* Navy blue */
+    --gc-secondary-light: #3B82F6; /* Lighter blue */
+    --gc-accent: #06B6D4; /* Cyan accent */
+    --gc-success: #10B981; /* Green */
+    --gc-warning: #F59E0B; /* Amber */
+    --gc-danger: #EF4444; /* Red */
+    --gc-light: #F8FAFC; /* Light gray */
+    --gc-dark: #1F2937; /* Dark gray */
+    --gc-text: #374151; /* Text color */
+    --gc-text-light: #6B7280; /* Light text */
+    --gc-border: #E5E7EB; /* Border color */
+    --gc-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --gc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Global Styles */
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--gc-light);
+    color: var(--gc-text);
+    line-height: 1.6;
+}
+
+/* Text Colors */
+.text-primary {
+    color: var(--gc-primary) !important;
+}
+
+.text-gray-800 {
+    color: var(--gc-text) !important;
+}
+
+.text-gray-600 {
+    color: var(--gc-text-light) !important;
+}
+
+.text-gray-500 {
+    color: var(--gc-text-light) !important;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--gc-primary) 0%, var(--gc-secondary) 100%);
+    color: white;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Search Section */
+.search-section {
+    padding: 3rem 0;
+}
+
+.search-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--gc-shadow-lg);
+    padding: 2.5rem;
+    border: 1px solid var(--gc-border);
+}
+
+.search-title {
+    color: var(--gc-secondary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.search-subtitle {
+    color: var(--gc-text-light);
+    margin-bottom: 2rem;
+}
+
+/* Search Form */
+.search-form {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    padding-left: 3rem;
+    border: 2px solid var(--gc-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--gc-primary);
+    box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gc-text-light);
+    z-index: 2;
+}
+
+.search-btn {
+    background: linear-gradient(135deg, var(--gc-primary) 0%, var(--gc-primary-dark) 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--gc-shadow);
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--gc-shadow-lg);
+    background: linear-gradient(135deg, var(--gc-primary-dark) 0%, var(--gc-secondary) 100%);
+}
+
+/* Info Card */
+.info-card {
+    background: linear-gradient(135deg, rgba(32, 178, 170, 0.1) 0%, rgba(30, 58, 138, 0.1) 100%);
+    border: 1px solid rgba(32, 178, 170, 0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.info-title {
+    color: var(--gc-secondary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-list li {
+    padding: 0.5rem 0;
+    color: var(--gc-text);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.info-list li::before {
+    content: '•';
+    color: var(--gc-primary);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* Patient Result Card */
+.patient-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--gc-shadow-lg);
+    border: 1px solid var(--gc-border);
+    overflow: hidden;
+}
+
+.patient-header {
+    background: linear-gradient(135deg, var(--gc-primary) 0%, var(--gc-secondary) 100%);
+    color: white;
+    padding: 1.5rem;
+}
+
+.patient-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.patient-body {
+    padding: 2rem;
+}
+
+/* Patient Info Table */
+.patient-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-group {
+    background: var(--gc-light);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--gc-border);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gc-border);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--gc-secondary);
+}
+
+.info-value {
+    color: var(--gc-text);
+    text-align: right;
+}
+
+/* Classification Badge */
+.classification-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.classification-ringan {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.classification-sedang {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+}
+
+.classification-berat {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+}
+
+.classification-tinggi {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.classification-rendah {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+}
+
+/* Video Section */
+.video-section {
+    margin-top: 2rem;
+}
+
+.video-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--gc-shadow);
+    border: 1px solid var(--gc-border);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--gc-shadow-lg);
+}
+
+.video-header {
+    background: linear-gradient(135deg, var(--gc-secondary) 0%, var(--gc-secondary-light) 100%);
+    color: white;
+    padding: 1.25rem;
+}
+
+.video-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.video-body {
+    padding: 1.5rem;
+}
+
+.video-player {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: var(--gc-shadow);
+    margin-top: 1rem;
+    max-height: 400px;
+}
+
+.video-description {
+    color: var(--gc-text-light);
+    margin: 1rem 0;
+    line-height: 1.6;
+}
+
+/* Test Results */
+.test-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.test-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--gc-border);
+    box-shadow: var(--gc-shadow);
+}
+
+.test-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--gc-border);
+}
+
+.test-name {
+    font-weight: 600;
+    color: var(--gc-secondary);
+    font-size: 1.1rem;
+}
+
+.test-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.test-status.normal {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--gc-success);
+}
+
+.test-status.abnormal {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--gc-danger);
+}
+
+.test-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gc-text);
+    margin: 0.5rem 0;
+}
+
+.test-unit {
+    color: var(--gc-text-light);
+    font-size: 0.875rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn-geriatric {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary-gc {
+    background: linear-gradient(135deg, var(--gc-primary) 0%, var(--gc-primary-dark) 100%);
+    color: white;
+}
+
+.btn-primary-gc:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--gc-shadow-lg);
+    color: white;
+}
+
+.btn-secondary-gc {
+    background: white;
+    color: var(--gc-secondary);
+    border: 2px solid var(--gc-secondary);
+}
+
+.btn-secondary-gc:hover {
+    background: var(--gc-secondary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gc-text-light);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: var(--gc-border);
+    margin-bottom: 1rem;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gc-text);
+}
+
+.empty-description {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Footer */
+.footer-section {
+    background: var(--gc-dark);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    text-align: center;
+    opacity: 0.8;
+}
+
+/* Utility Classes */
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-6 { margin-top: 1.5rem; }
+
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-sm { font-size: 0.875rem; }
+
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+
+.italic { font-style: italic; }
+
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-0\.5 { gap: 0.125rem; }
+.gap-0\.75 { gap: 0.1875rem; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .search-card {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+    
+    .patient-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .test-results {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-geriatric {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus Styles for Accessibility */
+.search-input:focus,
+.search-btn:focus,
+.btn-geriatric:focus {
+    outline: 2px solid var(--gc-primary);
+    outline-offset: 2px;
+} 
