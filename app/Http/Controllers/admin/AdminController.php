@@ -67,7 +67,7 @@ class AdminController extends Controller
         ];
 
         foreach ($pasiens as $pasien) {
-            $age = $pasien->tanggal_lahir->age;
+            $age = ($pasien->tanggal_lahir && method_exists($pasien->tanggal_lahir, 'age')) ? $pasien->tanggal_lahir->age : null;
             $gender = $pasien->jenis_kelamin;
 
             // Barthel Index
@@ -80,7 +80,7 @@ class AdminController extends Controller
             }
 
             // 2-Minute Step Test
-            if ($pasien->step_test !== null) {
+            if ($pasien->step_test !== null && $age !== null && $gender !== null) {
                 if (PemeriksaanHelper::isStepNormal($pasien->step_test, $age, $gender)) {
                     $testStats['step_test']['normal']++;
                 } else {
@@ -89,7 +89,7 @@ class AdminController extends Controller
             }
 
             // Single Leg Balance
-            if ($pasien->single_leg_open !== null) {
+            if ($pasien->single_leg_open !== null && $age !== null) {
                 if (PemeriksaanHelper::isSingleLegNormal($pasien->single_leg_open, $age, false)) {
                     $testStats['single_leg']['normal']++;
                 } else {
@@ -98,7 +98,7 @@ class AdminController extends Controller
             }
 
             // Five Times Sit to Stand
-            if ($pasien->sit_to_stand !== null) {
+            if ($pasien->sit_to_stand !== null && $age !== null) {
                 if (PemeriksaanHelper::isSitStandNormal($pasien->sit_to_stand, $age)) {
                     $testStats['sit_to_stand']['normal']++;
                 } else {

@@ -140,6 +140,7 @@
                 document.getElementById('foundation_id').removeAttribute('required');
                 document.getElementById('full_name').removeAttribute('required');
                 document.getElementById('foundation_password').removeAttribute('name');
+                document.getElementById('foundation_password').removeAttribute('required');
 
                 document.getElementById('email').setAttribute('required', 'required');
                 document.getElementById('admin_password').setAttribute('required', 'required');

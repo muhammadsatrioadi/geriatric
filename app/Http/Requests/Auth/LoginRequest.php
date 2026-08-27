@@ -146,6 +146,10 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
+        if ($this->input('login_mode') === 'foundation') {
+            return Str::transliterate(Str::lower($this->input('foundation_id') . '|' . $this->input('full_name')) . '|' . $this->ip());
+        }
+
         return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

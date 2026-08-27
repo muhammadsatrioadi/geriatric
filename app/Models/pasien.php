@@ -87,27 +87,44 @@ class pasien extends Model
      */
     public function getClassificationAttribute(): string
     {
-        $age = $this->tanggal_lahir->age;
+        $age = ($this->tanggal_lahir && method_exists($this->tanggal_lahir, 'age')) ? $this->tanggal_lahir->age : null;
         $gender = $this->jenis_kelamin;
         $normalCount = 0;
+        $testsCount = 0;
         // Cek normalitas tiap tes menggunakan helper dengan parameter baru
-        if (\App\Helpers\PemeriksaanHelper::isBarthelNormal($this->barthel_index)) {
-            $normalCount++;
+        if ($this->barthel_index !== null) {
+            $testsCount++;
+            if (\App\Helpers\PemeriksaanHelper::isBarthelNormal($this->barthel_index)) {
+                $normalCount++;
+            }
         }
-        if (\App\Helpers\PemeriksaanHelper::isStepNormal($this->step_test, $age, $gender)) {
-            $normalCount++;
+        if ($this->step_test !== null && $age !== null && $gender !== null) {
+            $testsCount++;
+            if (\App\Helpers\PemeriksaanHelper::isStepNormal($this->step_test, $age, $gender)) {
+                $normalCount++;
+            }
         }
         // Asumsikan single_leg_open menyimpan nilai open-eye
-        if (\App\Helpers\PemeriksaanHelper::isSingleLegNormal($this->single_leg_open, $age, false)) {
-            $normalCount++;
+        if ($this->single_leg_open !== null && $age !== null) {
+            $testsCount++;
+            if (\App\Helpers\PemeriksaanHelper::isSingleLegNormal($this->single_leg_open, $age, false)) {
+                $normalCount++;
+            }
         }
-        if (\App\Helpers\PemeriksaanHelper::isSitStandNormal($this->sit_to_stand, $age)) {
-            $normalCount++;
+        if ($this->sit_to_stand !== null && $age !== null) {
+            $testsCount++;
+            if (\App\Helpers\PemeriksaanHelper::isSitStandNormal($this->sit_to_stand, $age)) {
+                $normalCount++;
+            }
         }
-        // Tentukan level klasifikasi
-        if ($normalCount >= 3) {
+        if ($testsCount === 0) {
+            return 'Rendah';
+        }
+        // Tentukan level klasifikasi berdasarkan proporsi normal
+        $ratio = $normalCount / $testsCount;
+        if ($ratio >= 0.75) {
             return 'Tinggi';
-        } elseif ($normalCount === 2) {
+        } elseif ($ratio >= 0.5) {
             return 'Sedang';
         }
         return 'Rendah';

@@ -33,7 +33,7 @@ Route::controller(PublicSelfAssessmentController::class)->group(function () {
 // All foundation users should use the main login route with login_mode=foundation
 
 // Foundation routes (authenticated)
-Route::middleware(['auth', 'verified', RoleManager::class . ':foundation'])->group(function () {
+Route::middleware(['auth', RoleManager::class . ':foundation'])->group(function () {
     Route::prefix('foundation')->group(function () {
         Route::controller(FoundationController::class)->group(function () {
             Route::get('/dashboard', 'dashboard')->name('foundation.dashboard');
@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified', RoleManager::class . ':foundation'])->gro
     });
 });
 
-Route::middleware(['auth', 'verified', RoleManager::class . ':admin'])->group(function () {
+Route::middleware(['auth', RoleManager::class . ':admin'])->group(function () {
      Route::prefix('admin')->group(function (){
         Route::controller(AdminController::class)-> group(function(){
             Route::get('/dashboard', 'index')->name('admin');
@@ -91,7 +91,7 @@ Route::middleware(['auth', 'verified', RoleManager::class . ':admin'])->group(fu
     });
 });
 
-Route::middleware(['auth', 'verified', RoleManager::class . ':superadmin'])->group(function () {
+Route::middleware(['auth', RoleManager::class . ':superadmin'])->group(function () {
      Route::prefix('superadmin')->group(function (){
         Route::controller(SuperAdminController::class)-> group(function(){
              Route::get('/dashboard', 'index')->name('superadmin');
