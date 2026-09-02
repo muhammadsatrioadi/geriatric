@@ -20,14 +20,10 @@ class PublicSelfAssessmentController extends Controller
         $videos = [];
 
         foreach ($testTypes as $testType) {
-            $video = Video::where('jenis', 'global')
-                ->where('test_type', $testType)
+            $video = Video::where('test_type', $testType)
                 ->where('is_active', true)
-                ->where(function ($query) {
-                    $query->where('category_type', 'self_assessment')
-                          ->orWhere('category_type', 'overall');
-                })
                 ->orderByRaw("FIELD(category_type, 'self_assessment', 'overall', 'per_test')")
+                ->orderBy('created_at', 'desc')
                 ->first();
 
             $videos[$testType] = $video;
