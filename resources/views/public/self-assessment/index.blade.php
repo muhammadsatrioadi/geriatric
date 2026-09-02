@@ -108,6 +108,21 @@
                                     <p>Berikan skor 0-100 berdasarkan kemampuan aktivitas sehari-hari. Skor 100 = independen, 0-20 = ketergantungan total.</p>
                                 </div>
                             </div>
+
+                            @if(isset($formVideos['barthel']) && $formVideos['barthel'])
+                                <div class="video-player-card mb-6">
+                                    <div class="video-player-header">
+                                        <i class="fa fa-play-circle"></i>
+                                        <span>Video Panduan: {{ $formVideos['barthel']->judul }}</span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <video controls class="video-player" preload="metadata" playsinline>
+                                            <source src="{{ $formVideos['barthel']->video_url }}" type="{{ $formVideos['barthel']->file_type }}">
+                                            Browser Anda tidak mendukung pemutar video.
+                                        </video>
+                                    </div>
+                                </div>
+                            @endif
                             
                             <div class="form-group">
                                 <label for="barthel_index" class="form-label">Total Skor Barthel Index</label>
@@ -149,6 +164,21 @@
                                     <p>Hitung jumlah langkah dalam 2 menit. Berdiri di tempat dan angkat lutut setinggi pinggang.</p>
                                 </div>
                             </div>
+
+                            @if(isset($formVideos['two_minute']) && $formVideos['two_minute'])
+                                <div class="video-player-card mb-6">
+                                    <div class="video-player-header">
+                                        <i class="fa fa-play-circle"></i>
+                                        <span>Video Panduan: {{ $formVideos['two_minute']->judul }}</span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <video controls class="video-player" preload="metadata" playsinline>
+                                            <source src="{{ $formVideos['two_minute']->video_url }}" type="{{ $formVideos['two_minute']->file_type }}">
+                                            Browser Anda tidak mendukung pemutar video.
+                                        </video>
+                                    </div>
+                                </div>
+                            @endif
                             
                             <div class="form-group">
                                 <label for="step_test" class="form-label">Jumlah Langkah dalam 2 Menit</label>
@@ -190,6 +220,21 @@
                                     <p>Ukur waktu berdiri satu kaki dengan mata terbuka. Catat dalam detik.</p>
                                 </div>
                             </div>
+
+                            @if(isset($formVideos['single_leg']) && $formVideos['single_leg'])
+                                <div class="video-player-card mb-6">
+                                    <div class="video-player-header">
+                                        <i class="fa fa-play-circle"></i>
+                                        <span>Video Panduan: {{ $formVideos['single_leg']->judul }}</span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <video controls class="video-player" preload="metadata" playsinline>
+                                            <source src="{{ $formVideos['single_leg']->video_url }}" type="{{ $formVideos['single_leg']->file_type }}">
+                                            Browser Anda tidak mendukung pemutar video.
+                                        </video>
+                                    </div>
+                                </div>
+                            @endif
                             
                             <div class="form-group">
                                 <label for="single_leg_open" class="form-label">Waktu Berdiri Satu Kaki (detik)</label>
@@ -231,6 +276,21 @@
                                     <p>Ukur waktu untuk melakukan 5 kali duduk-berdiri. Catat dalam detik.</p>
                                 </div>
                             </div>
+
+                            @if(isset($formVideos['five_stand']) && $formVideos['five_stand'])
+                                <div class="video-player-card mb-6">
+                                    <div class="video-player-header">
+                                        <i class="fa fa-play-circle"></i>
+                                        <span>Video Panduan: {{ $formVideos['five_stand']->judul }}</span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <video controls class="video-player" preload="metadata" playsinline>
+                                            <source src="{{ $formVideos['five_stand']->video_url }}" type="{{ $formVideos['five_stand']->file_type }}">
+                                            Browser Anda tidak mendukung pemutar video.
+                                        </video>
+                                    </div>
+                                </div>
+                            @endif
                             
                             <div class="form-group">
                                 <label for="sit_to_stand" class="form-label">Waktu 5x Duduk-Berdiri (detik)</label>
@@ -591,6 +651,44 @@
         
         .info-list li:last-child {
             border-bottom: none;
+        }
+
+        /* Video Player Card */
+        .video-player-card {
+            background: #ffffff;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-player-header {
+            background: linear-gradient(135deg, #20B2AA 0%, #1E3A8A 100%);
+            color: white;
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background: #000;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         /* Responsive */
