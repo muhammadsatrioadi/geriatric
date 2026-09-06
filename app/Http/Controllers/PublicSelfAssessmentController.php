@@ -10,26 +10,8 @@ class PublicSelfAssessmentController extends Controller
 {
     public function index()
     {
-        $formVideos = $this->getFormVideos();
+        $formVideos = Video::getFormGuideVideos();
         return view('public.self-assessment.index', compact('formVideos'));
-    }
-
-    private function getFormVideos()
-    {
-        $testTypes = ['barthel', 'two_minute', 'single_leg', 'five_stand'];
-        $videos = [];
-
-        foreach ($testTypes as $testType) {
-            $video = Video::where('test_type', $testType)
-                ->where('is_active', true)
-                ->orderByRaw("FIELD(category_type, 'self_assessment', 'overall', 'per_test')")
-                ->orderBy('created_at', 'desc')
-                ->first();
-
-            $videos[$testType] = $video;
-        }
-
-        return $videos;
     }
 
     public function process(Request $request)

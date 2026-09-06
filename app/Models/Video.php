@@ -160,4 +160,23 @@ class Video extends Model
 
         return $labels[$this->category_type] ?? $this->category_type;
     }
+
+    /**
+     * Get guide videos for each test type (used in self-assessment & foundation forms).
+     */
+    public static function getFormGuideVideos(): array
+    {
+        $testTypes = ['barthel', 'two_minute', 'single_leg', 'five_stand'];
+        $videos = [];
+
+        foreach ($testTypes as $testType) {
+            $videos[$testType] = static::where('test_type', $testType)
+                ->where('is_active', true)
+                ->orderByRaw("FIELD(category_type, 'self_assessment', 'overall', 'per_test')")
+                ->orderBy('created_at', 'desc')
+                ->first();
+        }
+
+        return $videos;
+    }
 }

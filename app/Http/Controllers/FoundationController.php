@@ -141,7 +141,8 @@ class FoundationController extends Controller
 
     public function create()
     {
-        return view('foundation.pasien.create');
+        $formVideos = Video::getFormGuideVideos();
+        return view('foundation.pasien.create', compact('formVideos'));
     }
 
     public function store(Request $request)

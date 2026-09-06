@@ -144,8 +144,13 @@
                             <h5 class="section-title">
                                 <i class="fa fa-clipboard-check"></i> Hasil Pemeriksaan
                             </h5>
+                            <p class="text-muted mb-3">
+                                <i class="fa fa-info-circle"></i>
+                                Tonton video panduan di bawah setiap tes sebelum mengisi hasil pemeriksaan.
+                            </p>
                             <div class="row">
                                 <div class="col-md-6">
+                                    @include('shared._form-guide-video', ['video' => $formVideos['barthel'] ?? null])
                                     <div class="form-group">
                                         <label for="barthel_index" class="form-label">Barthel Index (0-100)</label>
                                         <input type="number" name="barthel_index" id="barthel_index" 
@@ -154,6 +159,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    @include('shared._form-guide-video', ['video' => $formVideos['two_minute'] ?? null])
                                     <div class="form-group">
                                         <label for="step_test" class="form-label">2-Minute Step Test (langkah)</label>
                                         <input type="number" name="step_test" id="step_test" 
@@ -162,6 +168,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    @include('shared._form-guide-video', ['video' => $formVideos['single_leg'] ?? null])
                                     <div class="form-group">
                                         <label for="single_leg_open" class="form-label">Single Leg Balance (detik)</label>
                                         <input type="number" name="single_leg_open" id="single_leg_open" 
@@ -170,6 +177,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    @include('shared._form-guide-video', ['video' => $formVideos['five_stand'] ?? null])
                                     <div class="form-group">
                                         <label for="sit_to_stand" class="form-label">Five Times Sit to Stand (detik)</label>
                                         <input type="number" name="sit_to_stand" id="sit_to_stand" 
@@ -309,6 +317,43 @@
         .alert-danger {
             background: #fef2f2;
             color: #dc2626;
+        }
+
+        .video-player-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .video-player-header {
+            background: linear-gradient(135deg, #20B2AA 0%, #1E3A8A 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            background: #000;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         @media (max-width: 768px) {
