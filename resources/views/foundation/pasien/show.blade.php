@@ -294,7 +294,7 @@
                     </div>
                 </div>
 
-                <!-- Video Recommendations -->
+                <!-- Video Recommendations (Selalu pakai SENAM NEW FINAL) -->
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
@@ -303,19 +303,42 @@
                     </div>
                     <div class="card-body">
 
-                        <!-- Overall Video -->
-                        @if($overallVideo)
+                        <!-- Video utama: SENAM LANSIA -->
                         <div class="mb-4">
-                            <h6><i class="fas fa-star"></i> Video Rekomendasi Keseluruhan</h6>
+                            <h6><i class="fas fa-play-circle text-primary"></i> Video Rekomendasi Latihan Senam Lansia</h6>
+                            <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm border">
+                                <video controls class="w-100 h-100" style="object-fit: contain; background:#000;">
+                                    <source src="{{ asset('videos/senam-lansia-final.mov') }}" type="video/quicktime">
+                                    <source src="{{ asset('videos/senam-lansia-final.mov') }}" type="video/mp4">
+                                    Browser Anda tidak mendukung pemutaran video.
+                                    <a href="{{ asset('videos/senam-lansia-final.mov') }}" class="text-white d-block mt-2 text-center">
+                                        <i class="fas fa-download"></i> Unduh video senam
+                                    </a>
+                                </video>
+                            </div>
+                            <p class="text-muted small mt-2 mb-0">
+                                <i class="fas fa-info-circle"></i>
+                                Lakukan latihan senam lansia di atas secara rutin minimal <b>3 kali seminggu</b> sesuai petunjuk medis,
+                                dengan pendampingan keluarga/perawat agar aman.
+                            </p>
+                        </div>
+
+                        <!-- Overall Video jika masih ada di DB (jadi video tambahan) -->
+                        @if($overallVideo)
+                        <hr class="my-4">
+                        <div class="mb-4">
+                            <h6 class="text-muted small"><i class="fas fa-plus-circle"></i> Video Tambahan (Keseluruhan)</h6>
                             <div class="video-card">
+                                @if(!empty($overallVideo->judul) || !empty($overallVideo->deskripsi))
                                 <div class="video-info">
-                                    <h6 class="video-title">{{ $overallVideo->judul }}</h6>
-                                    <p class="video-description mb-2">{{ $overallVideo->deskripsi }}</p>
+                                    @if(!empty($overallVideo->judul))<h6 class="video-title">{{ $overallVideo->judul }}</h6>@endif
+                                    @if(!empty($overallVideo->deskripsi))<p class="video-description mb-2">{{ $overallVideo->deskripsi }}</p>@endif
                                     <div class="video-meta">
-                                        <span>{{ $overallVideo->klasifikasi }}</span>
-                                        <span>{{ $overallVideo->category_type_label }}</span>
+                                        @if(!empty($overallVideo->klasifikasi))<span>{{ $overallVideo->klasifikasi }}</span>@endif
+                                        @if(!empty($overallVideo->category_type_label))<span>{{ $overallVideo->category_type_label }}</span>@endif
                                     </div>
                                 </div>
+                                @endif
                                 <div class="video-player">
                                     <video controls class="w-100 rounded">
                                         <source src="{{ $overallVideo->video_url }}" type="video/mp4">
@@ -326,22 +349,29 @@
                         </div>
                         @endif
 
-                        <!-- Per Test Videos -->
+                        <!-- Per Test Videos jika masih ada di DB (jadi video tambahan) -->
+                        @php
+                            $filteredPerTestVideos = is_array($perTestVideos) ? array_filter($perTestVideos) : [];
+                        @endphp
+                        @if(!empty($filteredPerTestVideos))
+                        <hr class="my-4">
                         <div>
-                            <h6><i class="fas fa-list"></i> Video Rekomendasi Per Tes</h6>
+                            <h6 class="text-muted small"><i class="fas fa-list"></i> Video Tambahan (Per Tes)</h6>
                             <div class="row">
-                                @foreach($perTestVideos as $testType => $video)
+                                @foreach($filteredPerTestVideos as $testType => $video)
                                     @if($video)
                                     <div class="col-md-6 mb-3">
                                         <div class="video-card">
+                                            @if(!empty($video->judul) || !empty($video->deskripsi))
                                             <div class="video-info">
-                                                <h6 class="video-title">{{ $video->judul }}</h6>
-                                                <p class="video-description mb-2">{{ $video->deskripsi }}</p>
+                                                @if(!empty($video->judul))<h6 class="video-title">{{ $video->judul }}</h6>@endif
+                                                @if(!empty($video->deskripsi))<p class="video-description mb-2">{{ $video->deskripsi }}</p>@endif
                                                 <div class="video-meta">
-                                                    <span>{{ $video->test_type_label }}</span>
-                                                    <span>{{ $video->level_label }}</span>
+                                                    @if(!empty($video->test_type_label))<span>{{ $video->test_type_label }}</span>@endif
+                                                    @if(!empty($video->level_label))<span>{{ $video->level_label }}</span>@endif
                                                 </div>
                                             </div>
+                                            @endif
                                             <div class="video-player">
                                                 <video controls class="w-100 rounded">
                                                     <source src="{{ $video->video_url }}" type="video/mp4">
@@ -354,16 +384,15 @@
                                 @endforeach
                             </div>
                         </div>
-
-                        @if(!$overallVideo && empty(array_filter($perTestVideos)))
-                        <div class="text-center py-4">
-                            <i class="fas fa-video-slash fa-3x text-muted mb-3"></i>
-                            <h6 class="text-muted">Tidak ada video rekomendasi tersedia</h6>
-                            <p class="text-muted">Silakan hubungi admin untuk menambahkan video latihan yang sesuai.</p>
-                        </div>
                         @endif
                     </div>
                 </div>
+
+                <!-- Rekomendasi Tertulis Berdasarkan Klasifikasi -->
+                @include('shared._rekomendasi-tertulis', [
+                    'classification' => $pasien->classification
+                ])
+
             </div>
         </div>
     </div>

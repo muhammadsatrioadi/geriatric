@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-            <!-- Video Recommendations -->
+            <!-- Video Recommendations (Always SENAM NEW FINAL) -->
             <div class="result-card mb-8">
                 <div class="card-header">
                     <h2 class="card-title">
@@ -210,47 +210,57 @@
                     </h2>
                 </div>
                 <div class="card-body">
-                    <!-- Overall Video -->
+                    @include('shared._senam-lansia', [
+                        'videoSrc' => asset('videos/senam-lansia-final.mov')
+                    ])
+
+                    <hr class="my-6">
+
+                    <!-- Fallback: Overall Video jika ada dari database -->
                     @if($overallVideo)
                     <div class="video-section mb-6">
-                        <h4 class="video-title">
-                            <i class="fa fa-play-circle"></i> Video Rekomendasi Keseluruhan
+                        <h4 class="video-title text-sm opacity-75">
+                            <i class="fa fa-plus-circle"></i> Video Tambahan (Keseluruhan)
                         </h4>
                         <div class="video-container">
-                            <iframe src="{{ $overallVideo->video_url }}" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            <iframe src="{{ $overallVideo->video_url }}"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen>
                             </iframe>
                         </div>
+                        @if(!empty($overallVideo->title))
                         <div class="video-info">
                             <h5>{{ $overallVideo->title }}</h5>
-                            <p>{{ $overallVideo->description }}</p>
+                            <p>{{ $overallVideo->description ?? '' }}</p>
                         </div>
+                        @endif
                     </div>
                     @endif
 
-                    <!-- Per Test Videos -->
+                    <!-- Fallback: Per Test Videos jika ada dari database -->
                     @if(is_array($perTestVideos) && count($perTestVideos) > 0)
                     <div class="video-section">
-                        <h4 class="video-title">
-                            <i class="fa fa-list"></i> Video Rekomendasi Per Tes
+                        <h4 class="video-title text-sm opacity-75">
+                            <i class="fa fa-list"></i> Video Tambahan (Per Tes)
                         </h4>
                         <div class="video-grid">
                             @foreach($perTestVideos as $video)
                                 @if($video !== null)
                             <div class="video-item">
                                 <div class="video-container">
-                                    <iframe src="{{ $video->video_url }}" 
-                                            frameborder="0" 
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    <iframe src="{{ $video->video_url }}"
+                                            frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                             allowfullscreen>
                                     </iframe>
                                 </div>
+                                @if(!empty($video->title))
                                 <div class="video-info">
                                     <h5>{{ $video->title }}</h5>
-                                    <p>{{ $video->description }}</p>
+                                    <p>{{ $video->description ?? '' }}</p>
                                 </div>
+                                @endif
                             </div>
                                 @endif
                             @endforeach
@@ -259,6 +269,12 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Rekomendasi Tertulis Berdasarkan Klasifikasi -->
+            @include('shared._rekomendasi-tertulis', [
+                'classification' => $classification,
+                'classificationLabel' => $classificationLabel ?? $classification
+            ])
 
             <!-- Action Buttons -->
             <div class="action-buttons">
