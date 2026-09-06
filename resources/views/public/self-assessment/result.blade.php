@@ -62,7 +62,7 @@
                                 @endif
                             </div>
                             <div class="classification-content">
-                                <h3 class="classification-title">{{ $classification }}</h3>
+                                <h3 class="classification-title">{{ $classificationLabel }} ({{ $classification }})</h3>
                                 <p class="classification-description">
                                     @if($classification == 'Ringan')
                                         Tingkat fungsional tinggi dengan kemampuan yang baik
@@ -131,7 +131,7 @@
                                 <div class="test-stat">
                                     <span class="stat-label">Status:</span>
                                     @if($tempPatient->step_test !== null)
-                                        @if(\App\Helpers\PemeriksaanHelper::isStepTestNormal($tempPatient->step_test))
+                                        @if(\App\Helpers\PemeriksaanHelper::isStepNormal($tempPatient->step_test, $age, $gender))
                                             <span class="badge badge-success">Normal</span>
                                         @else
                                             <span class="badge badge-danger">Tidak Normal</span>
@@ -159,7 +159,7 @@
                                 <div class="test-stat">
                                     <span class="stat-label">Status:</span>
                                     @if($tempPatient->single_leg_open !== null)
-                                        @if(\App\Helpers\PemeriksaanHelper::isSingleLegNormal($tempPatient->single_leg_open))
+                                        @if(\App\Helpers\PemeriksaanHelper::isSingleLegNormal($tempPatient->single_leg_open, $age, false))
                                             <span class="badge badge-success">Normal</span>
                                         @else
                                             <span class="badge badge-danger">Tidak Normal</span>
@@ -187,7 +187,7 @@
                                 <div class="test-stat">
                                     <span class="stat-label">Status:</span>
                                     @if($tempPatient->sit_to_stand !== null)
-                                        @if(\App\Helpers\PemeriksaanHelper::isSitToStandNormal($tempPatient->sit_to_stand))
+                                        @if(\App\Helpers\PemeriksaanHelper::isSitStandNormal($tempPatient->sit_to_stand, $age))
                                             <span class="badge badge-success">Normal</span>
                                         @else
                                             <span class="badge badge-danger">Tidak Normal</span>
@@ -231,13 +231,14 @@
                     @endif
 
                     <!-- Per Test Videos -->
-                    @if(count($perTestVideos) > 0)
+                    @if(is_array($perTestVideos) && count($perTestVideos) > 0)
                     <div class="video-section">
                         <h4 class="video-title">
                             <i class="fa fa-list"></i> Video Rekomendasi Per Tes
                         </h4>
                         <div class="video-grid">
                             @foreach($perTestVideos as $video)
+                                @if($video !== null)
                             <div class="video-item">
                                 <div class="video-container">
                                     <iframe src="{{ $video->video_url }}" 
@@ -251,6 +252,7 @@
                                     <p>{{ $video->description }}</p>
                                 </div>
                             </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>

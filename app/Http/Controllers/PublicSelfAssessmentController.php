@@ -56,14 +56,20 @@ class PublicSelfAssessmentController extends Controller
             ];
 
             $classification = $this->calculateClassification($tempPatient);
+            $classificationLabel = $this->getClassificationLabel($classification);
             $overallVideo = $this->getOverallVideo($classification);
             $perTestVideos = $this->getPerTestVideos($tempPatient);
+            $age = $tempPatient->tanggal_lahir->age;
+            $gender = $tempPatient->jenis_kelamin;
 
             return view('public.self-assessment.result', compact(
                 'tempPatient',
                 'classification',
+                'classificationLabel',
                 'overallVideo',
-                'perTestVideos'
+                'perTestVideos',
+                'age',
+                'gender'
             ));
         } catch (\Exception $e) {
             report($e);
@@ -93,24 +99,34 @@ class PublicSelfAssessmentController extends Controller
             }
 
             if ($normalCount >= 3) {
-                return 'Tinggi';
+                return 'Ringan';
             } elseif ($normalCount === 2) {
                 return 'Sedang';
             }
-            return 'Rendah';
+            return 'Berat';
         } catch (\Exception $e) {
             report($e);
             return 'Sedang';
         }
     }
 
+    private function getClassificationLabel(string $classification): string
+    {
+        $map = [
+            'Ringan' => 'Tinggi',
+            'Sedang' => 'Sedang',
+            'Berat'  => 'Rendah',
+        ];
+        return $map[$classification] ?? $classification;
+    }
+
     private function getOverallVideo($classification)
     {
         try {
             $classificationMapping = [
-                'Tinggi' => ['ringan', 'Ringan', 'NORMAL', 'normal'],
+                'Ringan' => ['ringan', 'Ringan', 'NORMAL', 'normal'],
                 'Sedang' => ['sedang', 'Sedang', 'normal', 'Normal'],
-                'Rendah' => ['berat', 'Berat', 'sedang', 'Sedang']
+                'Berat'  => ['berat', 'Berat', 'sedang', 'Sedang']
             ];
 
             $candidates = $classificationMapping[$classification] ?? ['Sedang'];
@@ -136,19 +152,19 @@ class PublicSelfAssessmentController extends Controller
             $testTypes = [
                 'barthel' => [
                     'test_value' => $patient->barthel_index,
-                    'is_normal' => PemeriksaanHelper::isBarthelNormal($patient->barthel_index)
+                    'is_normal'  => PemeriksaanHelper::isBarthelNormal($patient->barthel_index)
                 ],
                 'two_minute' => [
                     'test_value' => $patient->step_test,
-                    'is_normal' => PemeriksaanHelper::isStepNormal($patient->step_test, $age, $gender)
+                    'is_normal'  => PemeriksaanHelper::isStepNormal($patient->step_test, $age, $gender)
                 ],
                 'single_leg' => [
                     'test_value' => $patient->single_leg_open,
-                    'is_normal' => PemeriksaanHelper::isSingleLegNormal($patient->single_leg_open, $age, false)
+                    'is_normal'  => PemeriksaanHelper::isSingleLegNormal($patient->single_leg_open, $age, false)
                 ],
                 'five_stand' => [
                     'test_value' => $patient->sit_to_stand,
-                    'is_normal' => PemeriksaanHelper::isSitStandNormal($patient->sit_to_stand, $age)
+                    'is_normal'  => PemeriksaanHelper::isSitStandNormal($patient->sit_to_stand, $age)
                 ]
             ];
 
@@ -162,7 +178,9 @@ class PublicSelfAssessmentController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->first();
 
-                $videos[$testType] = $video;
+                if ($video !== null) {
+                    $videos[$testType] = $video;
+                }
             }
 
             return $videos;
