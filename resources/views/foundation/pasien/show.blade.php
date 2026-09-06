@@ -307,11 +307,11 @@
                         <div class="mb-4">
                             <h6><i class="fas fa-play-circle text-primary"></i> Video Rekomendasi Latihan Senam Lansia</h6>
                             <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm border">
-                                <video controls class="w-100 h-100" style="object-fit: contain; background:#000;">
-                                    <source src="{{ asset('videos/senam-lansia-final.mov') }}" type="video/quicktime">
-                                    <source src="{{ asset('videos/senam-lansia-final.mov') }}" type="video/mp4">
+                                <video controls preload="metadata" playsinline class="w-100 h-100" style="object-fit: contain; background:#000;">
+                                    <source src="{{ asset('videos/senam-lansia-final.mp4') }}" type="video/mp4">
+                                    <source src="{{ asset('videos/senam-lansia-final.mp4') }}" type="video/quicktime">
                                     Browser Anda tidak mendukung pemutaran video.
-                                    <a href="{{ asset('videos/senam-lansia-final.mov') }}" class="text-white d-block mt-2 text-center">
+                                    <a href="{{ asset('videos/senam-lansia-final.mp4') }}" class="text-white d-block mt-2 text-center">
                                         <i class="fas fa-download"></i> Unduh video senam
                                     </a>
                                 </video>

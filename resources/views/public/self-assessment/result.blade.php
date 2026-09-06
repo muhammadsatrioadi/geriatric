@@ -211,7 +211,7 @@
                 </div>
                 <div class="card-body">
                     @include('shared._senam-lansia', [
-                        'videoSrc' => asset('videos/senam-lansia-final.mov')
+                        'videoSrc' => asset('videos/senam-lansia-final.mp4')
                     ])
 
                     <hr class="my-6">
