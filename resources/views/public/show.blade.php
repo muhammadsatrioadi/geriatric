@@ -93,17 +93,17 @@
                                 <h4 class="classification-title">Klasifikasi Keseluruhan</h4>
                                 <p class="classification-description">Berdasarkan hasil pemeriksaan komprehensif</p>
                             </div>
-                            <div class="classification-badge classification-{{ strtolower($pasien->klasifikasi) }}">
+                            <div class="classification-badge classification-{{ strtolower($pasien->classification) }}">
                                 <div class="classification-icon">
-                                    @if($pasien->klasifikasi == 'Ringan')
+                                    @if($pasien->classification == 'Tinggi')
                                         <i class="fa fa-smile"></i>
-                                    @elseif($pasien->klasifikasi == 'Sedang')
+                                    @elseif($pasien->classification == 'Sedang')
                                         <i class="fa fa-meh"></i>
                                     @else
                                         <i class="fa fa-frown"></i>
                                     @endif
                                 </div>
-                                <span class="classification-text">{{ $pasien->klasifikasi }}</span>
+                                <span class="classification-text">{{ $pasien->classification }}</span>
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                             <div class="test-stat">
                                 <span class="stat-label">Status:</span>
                                 @if($pasien->step_test !== null)
-                                    @if(\App\Helpers\PemeriksaanHelper::isStepTestNormal($pasien->step_test))
+                                    @if(\App\Helpers\PemeriksaanHelper::isStepNormal($pasien->step_test, $age, $gender))
                                         <span class="badge badge-success">Normal</span>
                                     @else
                                         <span class="badge badge-danger">Tidak Normal</span>
@@ -193,7 +193,7 @@
                             <div class="test-stat">
                                 <span class="stat-label">Status:</span>
                                 @if($pasien->single_leg_open !== null)
-                                    @if(\App\Helpers\PemeriksaanHelper::isSingleLegNormal($pasien->single_leg_open))
+                                    @if(\App\Helpers\PemeriksaanHelper::isSingleLegNormal($pasien->single_leg_open, $age, false))
                                         <span class="badge badge-success">Normal</span>
                                     @else
                                         <span class="badge badge-danger">Tidak Normal</span>
@@ -221,7 +221,7 @@
                             <div class="test-stat">
                                 <span class="stat-label">Status:</span>
                                 @if($pasien->sit_to_stand !== null)
-                                    @if(\App\Helpers\PemeriksaanHelper::isSitToStandNormal($pasien->sit_to_stand))
+                                    @if(\App\Helpers\PemeriksaanHelper::isSitStandNormal($pasien->sit_to_stand, $age))
                                         <span class="badge badge-success">Normal</span>
                                     @else
                                         <span class="badge badge-danger">Tidak Normal</span>
@@ -240,47 +240,54 @@
                 <h3 class="section-title">
                     <i class="fa fa-video"></i> Video Rekomendasi Latihan
                 </h3>
-                
-                <!-- Overall Video -->
+
+                @include('shared._senam-lansia', [
+                    'videoSrc' => asset('videos/senam-lansia-final.mp4')
+                ])
+
                 @if($overallVideo)
-                <div class="video-card mb-6">
+                <div class="video-card mb-6 mt-6">
                     <h4 class="video-title">
-                        <i class="fa fa-play-circle"></i> Video Rekomendasi Keseluruhan
+                        <i class="fa fa-play-circle"></i> Video Tambahan (Keseluruhan)
                     </h4>
                     <div class="video-container">
-                        <iframe src="{{ $overallVideo->video_url }}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
+                        <video controls class="w-100 rounded" preload="metadata" playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">
+                            <source src="{{ $overallVideo->video_url }}" type="{{ $overallVideo->file_type ?? 'video/mp4' }}">
+                            Browser Anda tidak mendukung pemutaran video.
+                        </video>
                     </div>
+                    @if(!empty($overallVideo->judul) || !empty($overallVideo->deskripsi))
                     <div class="video-info">
-                        <h5>{{ $overallVideo->title }}</h5>
-                        <p>{{ $overallVideo->description }}</p>
+                        @if(!empty($overallVideo->judul))<h5>{{ $overallVideo->judul }}</h5>@endif
+                        @if(!empty($overallVideo->deskripsi))<p>{{ $overallVideo->deskripsi }}</p>@endif
                     </div>
+                    @endif
                 </div>
                 @endif
 
-                <!-- Per Test Videos -->
-                @if(count($perTestVideos) > 0)
+                @php
+                    $filteredPerTestVideos = is_array($perTestVideos) ? array_filter($perTestVideos) : [];
+                @endphp
+                @if(!empty($filteredPerTestVideos))
                 <div class="video-card">
                     <h4 class="video-title">
                         <i class="fa fa-list"></i> Video Rekomendasi Per Tes
                     </h4>
                     <div class="video-grid">
-                        @foreach($perTestVideos as $video)
+                        @foreach($filteredPerTestVideos as $testType => $video)
                         <div class="video-item">
                             <div class="video-container">
-                                <iframe src="{{ $video->video_url }}" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen>
-                                </iframe>
+                                <video controls preload="metadata" playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">
+                                    <source src="{{ $video->video_url }}" type="{{ $video->file_type ?? 'video/mp4' }}">
+                                    Browser Anda tidak mendukung pemutaran video.
+                                </video>
                             </div>
+                            @if(!empty($video->judul) || !empty($video->deskripsi))
                             <div class="video-info">
-                                <h5>{{ $video->title }}</h5>
-                                <p>{{ $video->description }}</p>
+                                @if(!empty($video->judul))<h5>{{ $video->judul }}</h5>@endif
+                                @if(!empty($video->deskripsi))<p>{{ $video->deskripsi }}</p>@endif
                             </div>
+                            @endif
                         </div>
                         @endforeach
                     </div>
@@ -480,7 +487,8 @@
             font-size: 1.125rem;
         }
         
-        .classification-ringan {
+        .classification-ringan,
+        .classification-tinggi {
             background: linear-gradient(135deg, #10B981 0%, #059669 100%);
         }
         
@@ -488,7 +496,8 @@
             background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
         }
         
-        .classification-berat {
+        .classification-berat,
+        .classification-rendah {
             background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         }
         
