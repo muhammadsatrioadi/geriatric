@@ -21,22 +21,22 @@ class MainController extends Controller
         ]);
 
         $searchTerm = trim($request->search_term);
-        $escapedTerm = addcslashes($searchTerm, '%_\\');
+        $likeTerm = '%' . str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $searchTerm) . '%';
         $pasien = null;
 
         // 1. Cari berdasarkan NIK (semua pasien publik, termasuk yayasan)
         $pasien = pasien::where('public_visible', true)
-            ->where('nik', 'LIKE', '%' . $escapedTerm . '%', 'ESCAPE', '\\')
+            ->where('nik', 'LIKE', $likeTerm)
             ->first();
 
         // 2. Format "Nama Yayasan - Nama Pasien" (mendukung - / – / — dengan/tanpa spasi)
         if (!$pasien && preg_match('/^(.+?)\s*[-–—]\s*(.+)$/u', $searchTerm, $matches)) {
             $foundationName = trim($matches[1]);
             $patientName = trim($matches[2]);
-            $escapedFoundation = addcslashes($foundationName, '%_\\');
-            $escapedPatient = addcslashes($patientName, '%_\\');
+            $likeFoundation = '%' . str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $foundationName) . '%';
+            $likePatient = '%' . str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $patientName) . '%';
 
-            $foundation = Foundation::where('name', 'LIKE', '%' . $escapedFoundation . '%', 'ESCAPE', '\\')
+            $foundation = Foundation::where('name', 'LIKE', $likeFoundation)
                 ->where('is_active', true)
                 ->first();
 
@@ -45,7 +45,7 @@ class MainController extends Controller
             }
 
             $pasien = pasien::where('foundation_id', $foundation->id)
-                ->where('nama', 'LIKE', '%' . $escapedPatient . '%', 'ESCAPE', '\\')
+                ->where('nama', 'LIKE', $likePatient)
                 ->where('public_visible', true)
                 ->first();
         }
@@ -53,7 +53,7 @@ class MainController extends Controller
         // 3. Cari berdasarkan nama saja
         if (!$pasien) {
             $results = pasien::where('public_visible', true)
-                ->where('nama', 'LIKE', '%' . $escapedTerm . '%', 'ESCAPE', '\\')
+                ->where('nama', 'LIKE', $likeTerm)
                 ->with('foundation')
                 ->get();
 
