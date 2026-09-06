@@ -9,14 +9,18 @@ if (!isset($videoSrc)) {
         Video Rekomendasi Latihan Senam Lansia
     </h6>
     <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm border">
-        <video controls preload="metadata" playsinline class="w-100 h-100" style="object-fit: contain; background:#000;">
-            <source src="{{ $videoSrc }}" type="video/mp4">
-            <source src="{{ $videoSrc }}" type="video/quicktime">
-            Browser Anda tidak mendukung pemutaran video.
-            <a href="{{ $videoSrc }}" class="text-white d-block mt-2 text-center">
-                <i class="fas fa-download"></i> Unduh video senam
-            </a>
+        <video controls preload="metadata" playsinline class="w-100 h-100" style="object-fit: contain; background:#000;"
+               onerror="this.nextElementSibling.style.display='block'; this.style.display='none';">
+            <source src="{{ $videoSrc }}?v={{ time() }}" type="video/mp4">
         </video>
+        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center bg-dark text-white p-4" style="display:none;">
+            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i>
+            <p class="mb-2 text-center"><b>Video tidak dapat diputar otomatis.</b></p>
+            <p class="small text-muted mb-3 text-center">Pastikan file <code>senam-lansia-final.mp4</code> sudah ter-upload di folder <code>public/videos/</code> server.</p>
+            <a href="{{ $videoSrc }}" target="_blank" class="btn btn-primary btn-sm">
+                <i class="fas fa-download me-1"></i> Klik di sini untuk buka / unduh video
+            </a>
+        </div>
     </div>
     <p class="text-muted small mt-2 mb-0">
         <i class="fas fa-info-circle"></i>
