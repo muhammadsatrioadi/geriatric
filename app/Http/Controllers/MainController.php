@@ -20,44 +20,59 @@ class MainController extends Controller
             'search_term' => 'required|string|min:2',
         ]);
 
-        $searchTerm = $request->search_term;
+        $searchTerm = trim($request->search_term);
+        $escapedTerm = addcslashes($searchTerm, '%_\\');
+        $pasien = null;
 
-        // Check if search term contains foundation name pattern (e.g., "Yayasan ABC - Nama Pasien")
-        if (strpos($searchTerm, ' - ') !== false) {
-            // Split by " - " to separate foundation name and patient name
-            $parts = explode(' - ', $searchTerm, 2);
-            $foundationName = trim($parts[0]);
-            $patientName = trim($parts[1]);
+        // 1. Cari berdasarkan NIK (semua pasien publik, termasuk yayasan)
+        $pasien = pasien::where('public_visible', true)
+            ->where('nik', 'LIKE', '%' . $escapedTerm . '%', 'ESCAPE', '\\')
+            ->first();
 
-            // Find foundation
-            $foundation = Foundation::where('name', 'LIKE', '%' . $foundationName . '%')
+        // 2. Format "Nama Yayasan - Nama Pasien" (mendukung - / – / — dengan/tanpa spasi)
+        if (!$pasien && preg_match('/^(.+?)\s*[-–—]\s*(.+)$/u', $searchTerm, $matches)) {
+            $foundationName = trim($matches[1]);
+            $patientName = trim($matches[2]);
+            $escapedFoundation = addcslashes($foundationName, '%_\\');
+            $escapedPatient = addcslashes($patientName, '%_\\');
+
+            $foundation = Foundation::where('name', 'LIKE', '%' . $escapedFoundation . '%', 'ESCAPE', '\\')
                 ->where('is_active', true)
                 ->first();
 
             if (!$foundation) {
-                return back()->with('error', 'Yayasan tidak ditemukan atau tidak aktif.');
+                return back()->with('error', 'Yayasan tidak ditemukan atau tidak aktif. Pastikan nama yayasan benar.');
             }
 
-            // Find patient by foundation and name
             $pasien = pasien::where('foundation_id', $foundation->id)
-                ->where('nama', 'LIKE', '%' . $patientName . '%')
+                ->where('nama', 'LIKE', '%' . $escapedPatient . '%', 'ESCAPE', '\\')
                 ->where('public_visible', true)
                 ->first();
-        } else {
-            // Search by NIK or name only (for admin patients)
-            $pasien = pasien::where(function ($query) use ($searchTerm) {
-                $query->where('nama', 'LIKE', '%' . $searchTerm . '%');
-            })
-                ->where('public_visible', true)
-                ->whereNull('foundation_id') // Only admin patients (no foundation)
-                ->first();
+        }
+
+        // 3. Cari berdasarkan nama saja
+        if (!$pasien) {
+            $results = pasien::where('public_visible', true)
+                ->where('nama', 'LIKE', '%' . $escapedTerm . '%', 'ESCAPE', '\\')
+                ->with('foundation')
+                ->get();
+
+            if ($results->count() === 1) {
+                $pasien = $results->first();
+            } elseif ($results->count() > 1) {
+                $examples = $results->map(function ($p) {
+                    $yayasan = $p->foundation?->name ?? 'Admin';
+                    return "{$yayasan} - {$p->nama}";
+                })->unique()->take(3)->implode(' | ');
+
+                return back()->with('error', "Ditemukan beberapa pasien dengan nama serupa. Gunakan format: Nama Yayasan - Nama Pasien. Contoh: {$examples}");
+            }
         }
 
         if (!$pasien) {
-            return back()->with('error', 'Pasien tidak ditemukan atau data tidak tersedia untuk publik. Silakan cek nama yayasan dan nama pasien, atau hubungi admin.');
+            return back()->with('error', 'Pasien tidak ditemukan atau data tidak tersedia untuk publik. Untuk pasien yayasan, gunakan format: Nama Yayasan - Nama Pasien (contoh: Yayasan Sehat - Budi Santoso).');
         }
 
-        // Redirect using a signed URL to prevent ID tampering
         return redirect()->to(URL::signedRoute('public.patient.show', ['pasien' => $pasien->id]));
     }
 
